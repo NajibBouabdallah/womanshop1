@@ -18,8 +18,6 @@ const ZRInfo = () => {
           baseRotation={0}
           blurStrength={10}
           wordAnimationEnd='bottom bottom'
-          
-            className="text-lg md:text-xl text-gray-800 leading-relaxed"
         >
           ZR Express هي خدمة توصيل جزائرية مبتكرة، تربط بين البائعين والعملاء في جميع الولايات.
           عند طلب المنتج، يتم تأكيد الطلب عبر الهاتف من طرف فريق ZR، ثم يُرسل عبر أحد نقاط التوزيع.
