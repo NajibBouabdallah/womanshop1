@@ -37,12 +37,14 @@ export default function ProductPage() {
         const snapshot = await getDocs(col);
        const list = snapshot.docs.map(doc => {
   const data = doc.data() as Product;
-  const { id, ...rest } = data; // نزيل id لو موجود داخل البيانات لتجنب التكرار
+const list = snapshot.docs.map(doc => {
+  const { id: _ignoreId, ...rest } = doc.data() as Product; // غير اسم id لتجاهله
   return {
-    id: doc.id, // نحتفظ بهذا id لأنه المعرف الفعلي من فايربيز
+    id: doc.id,
     ...rest,
   };
 });
+
 
         setProducts(list);
       } catch (error) {
