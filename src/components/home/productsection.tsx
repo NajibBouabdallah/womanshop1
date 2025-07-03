@@ -35,14 +35,13 @@ const ProductSection = () => {
         const productsCollection = collection(db, 'products');
         const productsSnapshot = await getDocs(productsCollection);
     
+const { id: _ignoredId, ...rest } = doc.data() as Product;
+return {
+  id: doc.id,
+  ...rest,
+};
 
-const productsList = productsSnapshot.docs.map(doc => {
-  const rest = doc.data() as Product;
-  return {
-    id: doc.id, // هذا اللي نستعمله فعلاً
-    ...rest,
-  };
-});
+        
 
         
         if (!cancelled) {
