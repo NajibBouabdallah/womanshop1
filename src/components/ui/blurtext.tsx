@@ -24,11 +24,7 @@ const buildKeyframes = (
     ...Object.keys(from),
     ...steps.flatMap((s) => Object.keys(s)),
   ]);
-type SpanTransition = {
-  ease?: string | string[];
-  delay?: number;
-  [key: string]: any;
-};
+
   const keyframes: Record<string, Array<string | number>> = {};
   keys.forEach((k) => {
     keyframes[k] = [from[k], ...steps.map((s) => s[k])];
