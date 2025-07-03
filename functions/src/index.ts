@@ -1,51 +1,10 @@
-import * as functions from "firebase-functions";
-import * as express from "express";
-
-const app = express();
-// ... باقي الكود
-
-exports.nextApp = functions.https.onRequest((req: express.Request, res: express.Response) => {
-  return app.prepare().then(() => handle(req, res));
-});
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */const functions = require('firebase-functions');
-const next = require('next');
+import * as functions from 'firebase-functions';
+import next from 'next';
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev, conf: { distDir: '.next' } });
 const handle = app.getRequestHandler();
 
-exports.nextApp = functions.https.onRequest((req, res) => {
+export const nextApp = functions.https.onRequest((req, res) => {
   return app.prepare().then(() => handle(req, res));
 });
-
-
-import {setGlobalOptions} from "firebase-functions";
-import {onRequest} from "firebase-functions/https";
-import * as logger from "firebase-functions/logger";
-
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
-
-// For cost control, you can set the maximum number of containers that can be
-// running at the same time. This helps mitigate the impact of unexpected
-// traffic spikes by instead downgrading performance. This limit is a
-// per-function limit. You can override the limit for each function using the
-// `maxInstances` option in the function's options, e.g.
-// `onRequest({ maxInstances: 5 }, (req, res) => { ... })`.
-// NOTE: setGlobalOptions does not apply to functions using the v1 API. V1
-// functions should each use functions.runWith({ maxInstances: 10 }) instead.
-// In the v1 API, each function can only serve one request per container, so
-// this will be the maximum concurrent request count.
-setGlobalOptions({ maxInstances: 10 });
-
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
