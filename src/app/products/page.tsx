@@ -33,13 +33,15 @@ useEffect(() => {
     try {
       const col = collection(db, 'products');
       const snapshot = await getDocs(col);
-      const list = snapshot.docs.map(doc => {
-        const data = doc.data() as Product;
-        // هنا ما نضيف id من doc.id
-        return {
-          ...data, // فقط بيانات المنتج بدون id
-        };
-      });
+   const productsList = productsSnapshot.docs.map(doc => {
+  const data = doc.data() as Product;
+  const { id, ...rest } = data;  // استخرج id لو موجود من البيانات
+  return {
+    id: doc.id,  // خذ id من doc.id فقط
+    ...rest,     // باقي البيانات بدون id
+  };
+});
+
       setProducts(list);
     } catch (error) {
       console.error('خطأ في جلب المنتجات:', error);
