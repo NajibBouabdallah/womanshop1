@@ -17,13 +17,7 @@ interface Product {
   available: boolean;
   description?: string;
 }
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  imageUrl?: string;
-  quantity: number;
-}
+
 
 export default function ProductDetail() {
   const [product, setProduct] = useState<Product | null>(null);
