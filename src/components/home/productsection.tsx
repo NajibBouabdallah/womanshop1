@@ -3,7 +3,7 @@
 import ScrollVelocity from '../ui/scrollvelocity';
 import FlowingMenu from '../ui/flowingmenu';
 import React, { useEffect, useState } from 'react';
-import { collection } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore'; // ✅ تأكد أنه مستخدم
 import { db } from '@/lib/firebase'; 
 import ProductCard from '@/components/productcard';
 import Link from 'next/link';
@@ -32,17 +32,17 @@ const ProductSection = () => {
     async function fetchProducts() {
       setLoading(true);
       try {
-const productsList = productsSnapshot.docs.map(doc => {
-const { ...rest } = doc.data() as Product;
-  return {
-    id: doc.id,
-    ...rest,
-  };
-});
+        const productsCollection = collection(db, 'products'); // ✅ لازم تستعمله
+        const productsSnapshot = await getDocs(productsCollection); // ✅ كان ناقص
 
-        
+        const productsList = productsSnapshot.docs.map(doc => {
+          const data = doc.data() as Omit<Product, 'id'>;
+          return {
+            id: doc.id,
+            ...data,
+          };
+        });
 
-        
         if (!cancelled) {
           setProducts(productsList);
         }
