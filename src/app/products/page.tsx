@@ -35,14 +35,11 @@ export default function ProductPage() {
       try {
         const col = collection(db, 'products');
         const snapshot = await getDocs(col);
-     const list = snapshot.docs.map(doc => {
-  const data = doc.data() as Product;
-  const { id: _, ...rest } = data; // تجاهل id المكرر
-  return {
-    id: doc.id,
-    ...rest,
-  };
-});
+const list = snapshot.docs.map(doc => ({
+  id: doc.id,
+  ...(doc.data() as Product),
+}));
+
 
 
         setProducts(list);
