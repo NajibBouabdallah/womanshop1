@@ -1,7 +1,5 @@
 import React from 'react';
 import CardSwap, { Card } from '@/components/ui/cardSwap';
-
-import BlurText from "@/components/ui/blurtext";
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import RotatingText from '../ui/rotatingtext';
