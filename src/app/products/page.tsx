@@ -35,10 +35,15 @@ export default function ProductPage() {
       try {
         const col = collection(db, 'products');
         const snapshot = await getDocs(col);
-        const list = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...(doc.data() as Product),
-        }));
+       const list = snapshot.docs.map(doc => {
+  const data = doc.data() as Product;
+  const { id, ...rest } = data; // تخلص من id القادم من data
+  return {
+    id: doc.id,
+    ...rest,
+  };
+});
+
         setProducts(list);
       } catch (error) {
         console.error('خطأ في جلب المنتجات:', error);
