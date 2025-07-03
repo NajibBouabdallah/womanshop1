@@ -27,48 +27,52 @@ export default function ProductPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-useEffect(() => {
-  async function fetchProducts() {
-    setLoading(true);
-    try {
-const col = collection(db, 'products');
-const snapshot = await getDocs(col);
 
-const productsList = snapshot.docs.map(doc => {
-  return { ...doc.data() };
-});
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true);
+      try {
+        const col = collection(db, 'products');
+        const snapshot = await getDocs(col);
 
+        const productsList: Product[] = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            name: data.name,
+            price: data.price,
+            quantityInStore: data.quantityInStore,
+            color: data.color,
+            sizes: data.sizes,
+            imageUrl: data.imageUrl,
+            available: data.available,
+            homeDelivery: data.homeDelivery,
+            zrDelivery: data.zrDelivery,
+            description: data.description,
+          };
+        });
 
-// استخدم productsList في مكان ما، مثلاً:
-setProducts(productsList);
-
-
-      setProducts(list);
-    } catch (error) {
-      console.error('خطأ في جلب المنتجات:', error);
-    } finally {
-      setLoading(false);
+        setProducts(productsList);
+      } catch (error) {
+        console.error('خطأ في جلب المنتجات:', error);
+      } finally {
+        setLoading(false);
+      }
     }
-  }
-  fetchProducts();
-}, []);
+    fetchProducts();
+  }, []);
 
-
-  // تصفية المنتجات حسب البحث (اسم المنتج)
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // حساب عدد الصفحات
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
 
-  // المنتجات المعروضة في الصفحة الحالية
   const currentProducts = filteredProducts.slice(
     (currentPage - 1) * PRODUCTS_PER_PAGE,
     currentPage * PRODUCTS_PER_PAGE
   );
 
-  // تغيير الصفحة
   function goToPage(page: number) {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
@@ -82,7 +86,6 @@ setProducts(productsList);
     <div className="min-h-screen bg-gradient-to-b from-gray-400 to-pink-600 p-24">
       <h1 className="text-white text-8xl font-bold mb-6 text-center text-stroke ">منتجاتنا</h1>
 
-      {/* حقل البحث */}
       <div className="max-w-md mx-auto mb-8">
         <input
           type="text"
@@ -90,13 +93,12 @@ setProducts(productsList);
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
-            setCurrentPage(1); // إعادة التصفح للصفحة الأولى عند البحث
+            setCurrentPage(1);
           }}
           className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
         />
       </div>
 
-      {/* عرض المنتجات */}
       {filteredProducts.length === 0 ? (
         <p className="text-center text-white text-lg">لا توجد منتجات تطابق البحث</p>
       ) : (
@@ -109,7 +111,6 @@ setProducts(productsList);
         </section>
       )}
 
-      {/* ترقيم الصفحات */}
       {totalPages > 1 && (
         <div className="flex justify-center mt-10 gap-3 flex-wrap">
           <button
