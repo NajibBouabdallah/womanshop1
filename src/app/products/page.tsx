@@ -35,10 +35,9 @@ useEffect(() => {
       const snapshot = await getDocs(col);
       const list = snapshot.docs.map(doc => {
         const data = doc.data() as Product;
-        const { id, ...rest } = data as any; // إزالة id من البيانات الأصلية
+        // هنا ما نضيف id من doc.id
         return {
-          id: doc.id,
-          ...rest,
+          ...data, // فقط بيانات المنتج بدون id
         };
       });
       setProducts(list);
