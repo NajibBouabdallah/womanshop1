@@ -27,9 +27,7 @@ export default function ProductPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-
-  // جلب المنتجات من Firebase
- useEffect(() => {
+useEffect(() => {
   async function fetchProducts() {
     setLoading(true);
     try {
@@ -37,9 +35,10 @@ export default function ProductPage() {
       const snapshot = await getDocs(col);
       const list = snapshot.docs.map(doc => {
         const data = doc.data() as Product;
+        const { id, ...rest } = data as any; // إزالة id من البيانات الأصلية
         return {
           id: doc.id,
-          ...data,
+          ...rest,
         };
       });
       setProducts(list);
