@@ -17,6 +17,13 @@ interface Product {
   available: boolean;
   description?: string;
 }
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  imageUrl?: string;
+  quantity: number;
+}
 
 export default function ProductDetail() {
   const [product, setProduct] = useState<Product | null>(null);
@@ -75,15 +82,15 @@ else {
     }
 
     addToCart({
-      id: product.id + (selectedSize ?? '') + (selectedColor ?? ''),
-      name:
-        product.name +
-        (selectedSize ? ` - مقاس ${selectedSize}` : '') +
-        (selectedColor ? ` - لون ${selectedColor}` : ''),
-      price: product.price,
-      imageUrl: product.imageUrl,
-      quantity: selectedQuantity,
-    });
+  id: product.id + (selectedSize ?? '') + (selectedColor ?? ''),
+  name:
+    product.name +
+    (selectedSize ? ` - مقاس ${selectedSize}` : '') +
+    (selectedColor ? ` - لون ${selectedColor}` : ''),
+  price: product.price,
+  imageUrl: product.imageUrl,
+  quantity: selectedQuantity, // ✅ صحيح هنا لأنك ترسله لـ الكارت
+});
 
     alert('✅ تم إضافة المنتج إلى السلة');
   };
