@@ -24,7 +24,10 @@ const buildKeyframes = (
     ...Object.keys(from),
     ...steps.flatMap((s) => Object.keys(s)),
   ]);
-
+type SpanTransition = {
+  ease?: string | string[];
+  [key: string]: any;
+};
   const keyframes: Record<string, Array<string | number>> = {};
   keys.forEach((k) => {
     keyframes[k] = [from[k], ...steps.map((s) => s[k])];
@@ -104,7 +107,7 @@ const BlurText: React.FC<BlurTextProps> = ({
           times,
           delay: (index * delay) / 1000,
         };
-        (spanTransition as unknown).ease = easing;
+        (spanTransition as SpanTransition).ease = easing;
 
         return (
           <motion.span
