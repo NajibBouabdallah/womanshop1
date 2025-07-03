@@ -38,10 +38,12 @@ export default function OrderPage() {
   useEffect(() => {
     async function fetchWilayas() {
       const snapshot = await getDocs(collection(db, 'wilayas'));
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...(doc.data() as Wilaya),
-      }));
+     const data = snapshot.docs.map(doc => ({
+  ...(doc.data() as Wilaya),  // بيانات الويلايا بدون id أولاً
+  id: doc.id,                 // ثم نضيف id من doc.id حتى لا يتم الكتابة فوقه
+}));
+setWilayas(data);
+
       setWilayas(data);
       if(data.length > 0) setSelectedWilaya(data[0]);
     }
