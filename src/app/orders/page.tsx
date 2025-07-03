@@ -103,7 +103,7 @@ export default function OrderPage() {
       setAddress('');
       setDeliveryMethod('home');
       setSelectedWilaya(wilayas[0] || null);
-    } catch (error) {
+    } catch () {
       alert('حدث خطأ أثناء تأكيد الطلب. حاول مرة أخرى.');
     } finally {
       setLoading(false);
