@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import ProductCard from '@/components/productcard';
-import Link from 'next/link'; // استيراد Link
+import Link from 'next/link';
 
 interface Product {
   id: string;
@@ -35,16 +35,10 @@ export default function ProductPage() {
       try {
         const col = collection(db, 'products');
         const snapshot = await getDocs(col);
-const list = snapshot.docs.map(doc => {
-  const data = doc.data() as Product;
-  const { id, ...rest } = data; // تخلص من id لو موجود في data
-  return {
-    id: doc.id,
-    ...rest,
-  };
-});
-
-
+        const list = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...(doc.data() as Product),
+        }));
 
         setProducts(list);
       } catch (error) {
@@ -64,7 +58,7 @@ const list = snapshot.docs.map(doc => {
   // حساب عدد الصفحات
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
 
-  // حساب المنتجات المعروضة في الصفحة الحالية
+  // المنتجات المعروضة في الصفحة الحالية
   const currentProducts = filteredProducts.slice(
     (currentPage - 1) * PRODUCTS_PER_PAGE,
     currentPage * PRODUCTS_PER_PAGE
@@ -103,12 +97,11 @@ const list = snapshot.docs.map(doc => {
         <p className="text-center text-white text-lg">لا توجد منتجات تطابق البحث</p>
       ) : (
         <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-        {currentProducts.map(product => (
+          {currentProducts.map(product => (
             <Link key={product.id} href={`/products/${product.id}`}>
-                <ProductCard product={product} />
+              <ProductCard product={product} />
             </Link>
-            ))}
-
+          ))}
         </section>
       )}
 
