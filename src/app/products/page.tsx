@@ -33,14 +33,15 @@ useEffect(() => {
     try {
       const col = collection(db, 'products');
       const snapshot = await getDocs(col);
-   const productsList = productsSnapshot.docs.map(doc => {
-  const data = doc.data() as Product;
-  const { id, ...rest } = data;  // استخرج id لو موجود من البيانات
-  return {
-    id: doc.id,  // خذ id من doc.id فقط
-    ...rest,     // باقي البيانات بدون id
-  };
+ const snapshot = await getDocs(col);
+const productsList = snapshot.docs.map(doc => {
+  // ما تكتب id لو مش حتستخدمه مباشرة
+  return { ...doc.data() };
 });
+
+// استخدم productsList في مكان ما، مثلاً:
+setProducts(productsList);
+
 
       setProducts(list);
     } catch (error) {
