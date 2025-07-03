@@ -17,7 +17,14 @@ interface Product {
   available: boolean;
   description?: string;
 }
-
+// src/types/cart.ts
+export interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  imageUrl?: string;
+  quantity: number;
+}
 
 export default function ProductDetail() {
   const [product, setProduct] = useState<Product | null>(null);
@@ -74,8 +81,7 @@ else {
       alert('يرجى اختيار اللون');
       return;
     }
-
-    addToCart({
+const item: CartItem = {
   id: product.id + (selectedSize ?? '') + (selectedColor ?? ''),
   name:
     product.name +
@@ -83,8 +89,11 @@ else {
     (selectedColor ? ` - لون ${selectedColor}` : ''),
   price: product.price,
   imageUrl: product.imageUrl,
-  quantity: selectedQuantity, // ✅ صحيح هنا لأنك ترسله لـ الكارت
-});
+  quantity: selectedQuantity,
+};
+
+addToCart(item);
+    
 
     alert('✅ تم إضافة المنتج إلى السلة');
   };
