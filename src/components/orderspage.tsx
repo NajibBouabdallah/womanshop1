@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import {
   collection,
   query,
-  where,
   getDocs,
   orderBy,
   updateDoc,
