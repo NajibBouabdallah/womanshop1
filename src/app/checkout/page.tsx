@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useCartStore } from "@/store/cart-store";
 import { Button } from "@/components/ui/button";
-import Image from 'next/Image';
+import Image from "next/image"
 
 export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
