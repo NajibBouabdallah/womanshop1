@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useCartStore } from "@/store/cart-store";
 import { Button } from "@/components/ui/button";
+import Image from 'next/Image';
 
 export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
@@ -31,10 +32,13 @@ export default function CheckoutPage() {
                 className="flex flex-col md:flex-row items-center md:items-start justify-between border-b pb-6"
               >
                 {/* صورة المنتج */}
-                <img
+                <Iamge
                   src={item.imageUrl || "/placeholder.png"}
                   alt={item.name}
-                  className="w-32 h-32 object-cover rounded-md mb-4 md:mb-0 md:mr-6"
+                  width={32}
+                  height={32}
+                  Cover
+                  className=" object-cover rounded-md mb-4 md:mb-0 md:mr-6"
                 />
 
                 {/* تفاصيل المنتج */}
