@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase'; 
 import ProductCard from '@/components/productcard';
-import Link from 'next/link'; // استيراد Link
+import Link from 'next/link';
 
 interface Product {
   id: string;
@@ -28,24 +28,23 @@ const ProductSection = () => {
 
   useEffect(() => {
     let cancelled = false;
-  
+
     async function fetchProducts() {
       setLoading(true);
       try {
         const productsCollection = collection(db, 'products');
         const productsSnapshot = await getDocs(productsCollection);
- const productsList = productsSnapshot.docs.map(doc => {
-  const data = doc.data() as Product;
-  return {
-    id: doc.id,
-    ...data,
-  };
-});
+        const productsList = productsSnapshot.docs.map(doc => {
+          const data = doc.data() as Product;
+          const { id: _, ...rest } = data; // حذف id من data إن وُجد
+          return {
+            id: doc.id,
+            ...rest,
+          };
+        });
 
-
-  
         if (!cancelled) {
-          setProducts(productsList); // لا نضيف إذا تم الإلغاء
+          setProducts(productsList);
         }
       } catch (error) {
         console.error('❌ خطأ في جلب المنتجات:', error);
@@ -53,15 +52,13 @@ const ProductSection = () => {
         setLoading(false);
       }
     }
-  
+
     fetchProducts();
-  
+
     return () => {
       cancelled = true;
     };
   }, []);
-  
-  
 
   if (loading) {
     return <p className="text-center mt-10 text-white font-semibold text-lg">...جاري تحميل المنتجات</p>;
@@ -102,10 +99,9 @@ const ProductSection = () => {
         data-aos="fade-up"
       >
         {products.map(product => (
-         <Link key={product.id} href={`/products/${product.id}`}>
-         <ProductCard product={product} />
-       </Link>
-       
+          <Link key={product.id} href={`/products/${product.id}`}>
+            <ProductCard product={product} />
+          </Link>
         ))}
       </section>
     </div>
