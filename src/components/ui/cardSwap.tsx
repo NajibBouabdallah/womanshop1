@@ -109,9 +109,10 @@ import React, {
       [children]
     );
     const refs = useMemo<CardRef[]>(
-      () => childArr.map(() => React.createRef<HTMLDivElement>()),
-      [childArr.length]
-    );
+  () => childArr.map(() => React.createRef<HTMLDivElement>()),
+  [childArr.length]
+);
+
   
     const order = useRef<number[]>(
       Array.from({ length: childArr.length }, (_, i) => i)
