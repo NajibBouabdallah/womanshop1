@@ -40,7 +40,9 @@ import React, {
   );
   Card.displayName = "Card";
   
-  type CardRef = RefObject<HTMLDivElement>;
+
+
+type CardRef = RefObject<HTMLDivElement | null>;
   interface Slot {
     x: number;
     y: number;
