@@ -1,8 +1,15 @@
-// app/orders/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import {
   Table,
@@ -22,7 +29,12 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   ChevronLeft,
   ChevronRight,
@@ -58,21 +70,18 @@ export default function OrdersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [ordersPerPage] = useState(10);
 
-  // Fetch orders from Firebase
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const ordersCollection = collection(db, "orders");
-        const q = query(ordersCollection, orderBy("createdAt", "desc"));
+        const q = query(
+          collection(db, "orders"),
+          orderBy("createdAt", "desc")
+        );
         const querySnapshot = await getDocs(q);
-
-        const ordersData: Order[] = [];
-        querySnapshot.forEach((doc) => {
-          ordersData.push({
-            id: doc.id,
-            ...doc.data(),
-          } as Order);
-        });
+        const ordersData: Order[] = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Order[];
 
         setOrders(ordersData);
         setFilteredOrders(ordersData);
@@ -86,11 +95,9 @@ export default function OrdersPage() {
     fetchOrders();
   }, []);
 
-  // Apply filters
   useEffect(() => {
     let result = orders;
 
-    // Apply search filter
     if (searchTerm) {
       result = result.filter(
         (order) =>
@@ -100,26 +107,22 @@ export default function OrdersPage() {
       );
     }
 
-    // Apply status filter
     if (statusFilter !== "all") {
       result = result.filter((order) => order.status === statusFilter);
     }
 
     setFilteredOrders(result);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   }, [searchTerm, statusFilter, orders]);
 
-  // Update order status
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
-      // Update in Firebase
       await updateDoc(doc(db, "orders", orderId), {
         status: newStatus,
       });
 
-      // Update local state
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
+      setOrders((prev) =>
+        prev.map((order) =>
           order.id === orderId ? { ...order, status: newStatus } : order
         )
       );
@@ -128,20 +131,20 @@ export default function OrdersPage() {
     }
   };
 
-  // Format date from Firebase timestamp
-  const formatDate = (timestamp: { seconds: number; nanoseconds: number }) => {
-    return format(new Date(timestamp.seconds * 1000), "dd/MM/yyyy HH:mm");
-  };
+  const formatDate = (timestamp: { seconds: number; nanoseconds: number }) =>
+    format(new Date(timestamp.seconds * 1000), "dd/MM/yyyy HH:mm");
 
-  // Pagination logic
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentOrders = filteredOrders.slice(
+    indexOfFirstOrder,
+    indexOfLastOrder
+  );
   const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
-  // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-  const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const nextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const firstPage = () => setCurrentPage(1);
   const lastPage = () => setCurrentPage(totalPages);
@@ -186,7 +189,7 @@ export default function OrdersPage() {
             </Select>
           </div>
 
-          <div className="rounded-md border mb-4">
+          <div className="rounded-md border mb-4 overflow-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -205,17 +208,15 @@ export default function OrdersPage() {
                 {currentOrders.length > 0 ? (
                   currentOrders.map((order) => (
                     <TableRow key={order.id}>
-                      <TableCell className="font-medium">{order.id}</TableCell>
+                      <TableCell>{order.id}</TableCell>
                       <TableCell>{order.name}</TableCell>
                       <TableCell>{order.phone}</TableCell>
                       <TableCell>
-                        <div className="flex flex-col">
-                          {order.items.map((item, index) => (
-                            <div key={index}>
-                              {item.name} (x{item.quantity}) - {item.price} دج
-                            </div>
-                          ))}
-                        </div>
+                        {order.items.map((item, index) => (
+                          <div key={index}>
+                            {item.name} (x{item.quantity}) - {item.price} دج
+                          </div>
+                        ))}
                       </TableCell>
                       <TableCell>{order.totalPrice} دج</TableCell>
                       <TableCell>{order.wilaya}</TableCell>
@@ -277,11 +278,12 @@ export default function OrdersPage() {
             </Table>
           </div>
 
-          {/* Pagination Controls */}
           {filteredOrders.length > ordersPerPage && (
             <div className="flex items-center justify-between px-2">
               <div className="text-sm text-muted-foreground">
-                عرض {indexOfFirstOrder + 1}-{Math.min(indexOfLastOrder, filteredOrders.length)} من {filteredOrders.length} طلب
+                عرض {indexOfFirstOrder + 1}-
+                {Math.min(indexOfLastOrder, filteredOrders.length)} من{" "}
+                {filteredOrders.length} طلب
               </div>
               <div className="flex items-center space-x-2">
                 <Button
@@ -290,7 +292,6 @@ export default function OrdersPage() {
                   onClick={firstPage}
                   disabled={currentPage === 1}
                 >
-                  <span className="sr-only">الصفحة الأولى</span>
                   <ChevronsLeft className="h-4 w-4" />
                 </Button>
                 <Button
@@ -299,10 +300,9 @@ export default function OrdersPage() {
                   onClick={prevPage}
                   disabled={currentPage === 1}
                 >
-                  <span className="sr-only">الصفحة السابقة</span>
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <div className="flex items-center justify-center text-sm font-medium">
+                <div className="text-sm font-medium">
                   الصفحة {currentPage} من {totalPages}
                 </div>
                 <Button
@@ -311,7 +311,6 @@ export default function OrdersPage() {
                   onClick={nextPage}
                   disabled={currentPage === totalPages}
                 >
-                  <span className="sr-only">الصفحة التالية</span>
                   <ChevronRight className="h-4 w-4" />
                 </Button>
                 <Button
@@ -320,7 +319,6 @@ export default function OrdersPage() {
                   onClick={lastPage}
                   disabled={currentPage === totalPages}
                 >
-                  <span className="sr-only">الصفحة الأخيرة</span>
                   <ChevronsRight className="h-4 w-4" />
                 </Button>
               </div>
@@ -330,10 +328,4 @@ export default function OrdersPage() {
       </Card>
     </div>
   );
-}
-
-// Helper function to update document in Firestore
-async function updateDoc(docRef: any, data: any) {
-  const { doc, updateDoc } = await import("firebase/firestore");
-  return updateDoc(docRef, data);
 }
