@@ -38,9 +38,6 @@ const productsList = snapshot.docs.map(doc => {
   return { ...doc.data() };
 });
 
-// استخدم productsList مثلاً:
-setProducts(productsList);
-
 
 // استخدم productsList في مكان ما، مثلاً:
 setProducts(productsList);
