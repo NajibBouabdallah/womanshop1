@@ -35,10 +35,14 @@ export default function ProductPage() {
       try {
         const col = collection(db, 'products');
         const snapshot = await getDocs(col);
-        const list = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...(doc.data() as Product),
-        }));
+       const list = snapshot.docs.map(doc => {
+  const data = doc.data() as Product;
+  const { id, ...rest } = data; // نزيل id لو موجود داخل البيانات لتجنب التكرار
+  return {
+    id: doc.id, // نحتفظ بهذا id لأنه المعرف الفعلي من فايربيز
+    ...rest,
+  };
+});
 
         setProducts(list);
       } catch (error) {
