@@ -43,12 +43,13 @@ export default function ProductDetail() {
         const docRef = doc(db, 'products', productId);
         const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          const data = docSnap.data() as Product;
-          setProduct({ id: docSnap.id, ...data });
-          if (data.sizes?.length > 0) setSelectedSize(data.sizes[0]);
-          if (data.colors?.length > 0) setSelectedColor(data.colors[0]);
-        } else {
+      if (docSnap.exists()) {
+  const data = docSnap.data() as Omit<Product, 'id'>; // ✅ حذف id
+  setProduct({ id: docSnap.id, ...data }); // ✅ الآن id موجود مرة وحدة فقط
+  if (data.sizes?.length > 0) setSelectedSize(data.sizes[0]);
+  if (data.colors?.length > 0) setSelectedColor(data.colors[0]);
+}
+else {
           setError('المنتج غير موجود');
         }
       } catch {
