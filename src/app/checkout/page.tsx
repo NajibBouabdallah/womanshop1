@@ -32,7 +32,7 @@ export default function CheckoutPage() {
                 className="flex flex-col md:flex-row items-center md:items-start justify-between border-b pb-6"
               >
                 {/* صورة المنتج */}
-                <Iamge
+                <Image 
                   src={item.imageUrl || "/placeholder.png"}
                   alt={item.name}
                   width={32}
