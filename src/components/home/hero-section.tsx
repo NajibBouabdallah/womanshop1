@@ -28,13 +28,7 @@ const HeroSection = () => {
   className="flex justify-center items-center flex-wrap gap-4 overflow-hidden"
   data-aos="fade-up"
 >
-  <BlurText
-    text="تبدأ  من هنا"
-    delay={150}
-    animateBy="words"
-    direction="top"
-    className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-bold mb-4 text-stroke"
-  />
+<h1 className='text-8xl sm:text-3xl text-stroke'>من هنا تبدا</h1>
 
   <RotatingText
     texts={["الأناقة", "الأنوثة", "الثقة", "الراحة"]}
