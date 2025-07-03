@@ -34,10 +34,15 @@ const ProductSection = () => {
       try {
         const productsCollection = collection(db, 'products');
         const productsSnapshot = await getDocs(productsCollection);
-        const productsList = productsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...(doc.data() as Product),
-        }));
+        const productsList = productsSnapshot.docs.map(doc => {
+  const data = doc.data() as Product;
+  const { id, ...rest } = data;  // لو موجود id في البيانات الأصلية، نفصلها
+  return {
+    id: doc.id,  // id من doc.id فقط
+    ...rest,     // باقي الحقول بدون id مكرر
+  };
+});
+
   
         if (!cancelled) {
           setProducts(productsList); // لا نضيف إذا تم الإلغاء
