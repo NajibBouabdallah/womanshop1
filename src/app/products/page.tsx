@@ -31,13 +31,16 @@ useEffect(() => {
   async function fetchProducts() {
     setLoading(true);
     try {
-      const col = collection(db, 'products');
-      const snapshot = await getDocs(col);
- const snapshot = await getDocs(col);
+const col = collection(db, 'products');
+const snapshot = await getDocs(col);
+
 const productsList = snapshot.docs.map(doc => {
-  // ما تكتب id لو مش حتستخدمه مباشرة
   return { ...doc.data() };
 });
+
+// استخدم productsList مثلاً:
+setProducts(productsList);
+
 
 // استخدم productsList في مكان ما، مثلاً:
 setProducts(productsList);
