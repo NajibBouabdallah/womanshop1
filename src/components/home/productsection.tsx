@@ -34,15 +34,17 @@ const ProductSection = () => {
       try {
         const productsCollection = collection(db, 'products');
         const productsSnapshot = await getDocs(productsCollection);
-        const productsList = productsSnapshot.docs.map(doc => {
-          const data = doc.data() as Product;
-const { id, ...rest } = data; // استخدم id بشكل صريح لتجنّب التحذير
-          return {
-            id: doc.id,
-            ...rest,
-          };
-        });
+    
 
+const productsList = productsSnapshot.docs.map(doc => {
+  const rest = doc.data() as Product;
+  return {
+    id: doc.id, // هذا اللي نستعمله فعلاً
+    ...rest,
+  };
+});
+
+        
         if (!cancelled) {
           setProducts(productsList);
         }
