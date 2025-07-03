@@ -37,7 +37,6 @@ export default function CheckoutPage() {
                   alt={item.name}
                   width={32}
                   height={32}
-                  Cover
                   className=" object-cover rounded-md mb-4 md:mb-0 md:mr-6"
                 />
 
