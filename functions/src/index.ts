@@ -1,3 +1,12 @@
+import * as functions from "firebase-functions";
+import * as express from "express";
+
+const app = express();
+// ... باقي الكود
+
+exports.nextApp = functions.https.onRequest((req: express.Request, res: express.Response) => {
+  return app.prepare().then(() => handle(req, res));
+});
 /**
  * Import function triggers from their respective submodules:
  *
