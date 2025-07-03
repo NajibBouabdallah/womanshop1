@@ -36,7 +36,7 @@ const ProductSection = () => {
         const productsSnapshot = await getDocs(productsCollection);
         const productsList = productsSnapshot.docs.map(doc => {
           const data = doc.data() as Product;
-          const { id: _, ...rest } = data; // حذف id من data إن وُجد
+const { id, ...rest } = data; // استخدم id بشكل صريح لتجنّب التحذير
           return {
             id: doc.id,
             ...rest,
