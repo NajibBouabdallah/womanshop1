@@ -3,7 +3,7 @@
 import ScrollVelocity from '../ui/scrollvelocity';
 import FlowingMenu from '../ui/flowingmenu';
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection } from 'firebase/firestore';
 import { db } from '@/lib/firebase'; 
 import ProductCard from '@/components/productcard';
 import Link from 'next/link';
@@ -32,9 +32,8 @@ const ProductSection = () => {
     async function fetchProducts() {
       setLoading(true);
       try {
-        const productsCollection = collection(db, 'products');
 const productsList = productsSnapshot.docs.map(doc => {
-  const { id: _ignoredId, ...rest } = doc.data() as Product;
+const { ...rest } = doc.data() as Product;
   return {
     id: doc.id,
     ...rest,
