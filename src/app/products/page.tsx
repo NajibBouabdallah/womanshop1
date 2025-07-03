@@ -35,14 +35,15 @@ export default function ProductPage() {
       try {
         const col = collection(db, 'products');
         const snapshot = await getDocs(col);
-       const list = snapshot.docs.map(doc => {
+     const list = snapshot.docs.map(doc => {
   const data = doc.data() as Product;
-  const { id, ...rest } = data; // تخلص من id القادم من data
+  const { id: _, ...rest } = data; // تجاهل id المكرر
   return {
     id: doc.id,
     ...rest,
   };
 });
+
 
         setProducts(list);
       } catch (error) {
