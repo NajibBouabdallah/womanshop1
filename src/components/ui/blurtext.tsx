@@ -26,6 +26,7 @@ const buildKeyframes = (
   ]);
 type SpanTransition = {
   ease?: string | string[];
+  delay?: number;
   [key: string]: any;
 };
   const keyframes: Record<string, Array<string | number>> = {};
@@ -102,12 +103,10 @@ const BlurText: React.FC<BlurTextProps> = ({
       {elements.map((segment, index) => {
         const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
 
-        const spanTransition: Transition = {
-          duration: totalDuration,
-          times,
-          delay: (index * delay) / 1000,
-        };
-        (spanTransition as SpanTransition).ease = easing;
+       const spanTransition: SpanTransition = {
+        delay: (index * delay) / 1000,
+        ease: easing,
+      };
 
         return (
           <motion.span
