@@ -29,32 +29,29 @@ export default function ProductPage() {
   const [currentPage, setCurrentPage] = useState(1);
 
   // جلب المنتجات من Firebase
-  useEffect(() => {
-    async function fetchProducts() {
-      setLoading(true);
-      try {
-        const col = collection(db, 'products');
-        const snapshot = await getDocs(col);
-       const list = snapshot.docs.map(doc => {
-  const data = doc.data() as Product;
-const list = snapshot.docs.map(doc => {
-  const { id: _ignoreId, ...rest } = doc.data() as Product; // غير اسم id لتجاهله
-  return {
-    id: doc.id,
-    ...rest,
-  };
-});
-
-
-        setProducts(list);
-      } catch (error) {
-        console.error('خطأ في جلب المنتجات:', error);
-      } finally {
-        setLoading(false);
-      }
+ useEffect(() => {
+  async function fetchProducts() {
+    setLoading(true);
+    try {
+      const col = collection(db, 'products');
+      const snapshot = await getDocs(col);
+      const list = snapshot.docs.map(doc => {
+        const data = doc.data() as Product;
+        return {
+          id: doc.id,
+          ...data,
+        };
+      });
+      setProducts(list);
+    } catch (error) {
+      console.error('خطأ في جلب المنتجات:', error);
+    } finally {
+      setLoading(false);
     }
-    fetchProducts();
-  }, []);
+  }
+  fetchProducts();
+}, []);
+
 
   // تصفية المنتجات حسب البحث (اسم المنتج)
   const filteredProducts = products.filter(product =>
