@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Button } from "./ui/button";
+
 import Link from "next/link";
 import { useCartStore } from "@/store/cart-store";
 import { ShoppingCart } from "lucide-react";
