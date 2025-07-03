@@ -129,7 +129,7 @@ import React, {
           makeSlot(i, cardDistance, verticalDistance, total),
           skewAmount
         )
-      );
+      )[config.durDrop, config.durMove, config.durReturn, config.ease, config.promoteOverlap, config.returnDelay, refs];
   
       const swap = () => {
         if (order.current.length < 2) return;
